@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  frigate:
+    container_name: frigate
+    privileged: true # this may not be necessary for all setups
+    restart: unless-stopped
+    image: blakeblackshear/frigate:stable-amd64
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/dri/renderD128 # for intel hwaccel, needs to be updated for your hardware
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/sdb4/romachandr/PycharmProjects/frigate/config/frigate.yml:/config/config.yml:ro
+      - /mnt/sdb4/romachandr/00-Draft/frigate/media:/media/frigate:rw
+      - /mnt/sdb4/romachandr/PycharmProjects/frigate/custom_model/cpu_model.tflite:/cpu_model.tflite:ro
+      - /mnt/sdb4/romachandr/PycharmProjects/frigate/custom_model/edgetpu_model.tflite:/edgetpu_model.tflite:ro
+      - /mnt/sdb4/romachandr/PycharmProjects/frigate/custom_model/labelmap.txt:/labelmap.txt:ro
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "5000:5000"
+      - "1935:1935" # RTMP feeds
+    environment:
+      FRIGATE_RTSP_PASSWORD: "admin7700023"

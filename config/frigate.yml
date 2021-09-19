@@ -1,0 +1,66 @@
+detectors:
+  cpu1:
+    type: cpu
+  cpu2:
+    type: cpu
+  cpu3:
+    type: cpu
+  cpu4:
+    type: cpu
+mqtt:
+  # Required: host name
+  host: 192.168.1.61
+  # Optional: port (default: shown below)
+  port: 1883
+  # Optional: topic prefix (default: shown below)
+  # WARNING: must be unique if you are running multiple instances
+  topic_prefix: frigate
+  # Optional: client id (default: shown below)
+  # WARNING: must be unique if you are running multiple instances
+  client_id: frigate
+  # Optional: user
+  user: mqtt
+  # Optional: password
+  # NOTE: Environment variables that begin with 'FRIGATE_' may be referenced in {}.
+  #       eg. password: '{FRIGATE_MQTT_PASSWORD}'
+  password: mqtt
+  # Optional: interval in seconds for publishing stats (default: shown below)
+  stats_interval: 60
+cameras:
+  c5_frigate:
+    ffmpeg:
+      inputs:
+        - path: rtsp://hass:TigroCam!23@192.168.1.105:554/cam/realmonitor?channel=1&subtype=0
+          roles:
+            - detect
+    objects:
+      track:
+        - car
+        - car_rom
+        - car_tigr
+        - person
+        - animal
+    width: 2560
+    height: 1440
+    fps: 5
+    snapshots:
+      # Optional: Enable writing jpg snapshot to /media/frigate/clips (default: shown below)
+      # This value can be set via MQTT and will be updated in startup based on retained value
+      enabled: True
+      # Optional: print a timestamp on the snapshots (default: shown below)
+      timestamp: False
+      # Optional: draw bounding box on the snapshots (default: shown below)
+      bounding_box: False
+      # Optional: crop the snapshot (default: shown below)
+      crop: True
+      # Optional: height to resize the snapshot to (default: original size) 175
+      height: 450
+      # Optional: Restrict snapshots to objects that entered any of the listed zones (default: no required zones)
+      # required_zones: []
+      # Optional: Camera override for retention settings (default: global values)
+      retain:
+        # Required: Default retention days (default: shown below)
+        default: 60
+        # Optional: Per object retention days
+        objects:
+          person: 60

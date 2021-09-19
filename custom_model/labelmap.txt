@@ -1,0 +1,5 @@
+0  car
+1  car_rom
+2  car_tigr
+3  person
+4  animal
